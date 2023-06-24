@@ -1,0 +1,2 @@
+*.js diff=dart
+*.js linguist-language=dart
