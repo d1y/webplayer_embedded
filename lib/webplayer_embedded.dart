@@ -15,7 +15,7 @@ class WebPlayerEmbedded implements IWebPlayerEmbedded {
 
   @override
   Future<bool> checkRunning() async {
-    return _server?.address != null;
+    return _server != null;
   }
 
   @override
@@ -45,10 +45,9 @@ class WebPlayerEmbedded implements IWebPlayerEmbedded {
 
   @override
   dispose() async {
-    if (_server?.port != null) {
-      return (await Future.wait<dynamic>([
-        _server?.close() as dynamic,
-      ]))[0];
+    if (_server != null) {
+      await _server!.close(force: true);
+      _server = null;
     }
   }
 
