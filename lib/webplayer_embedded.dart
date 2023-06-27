@@ -9,6 +9,9 @@ import 'package:webplayer_embedded/player_abs.dart';
 import 'package:webplayer_embedded/player_type.dart';
 import 'package:webplayer_embedded/shelf_flutter_asset.dart';
 
+export 'package:webplayer_embedded/player_abs.dart';
+export 'package:webplayer_embedded/player_type.dart';
+
 class WebPlayerEmbedded implements IWebPlayerEmbedded {
   int _port = 0;
   HttpServer? _server;
@@ -59,14 +62,14 @@ class WebPlayerEmbedded implements IWebPlayerEmbedded {
 
   @override
   getRealUrl(IWebPlayerEmbeddedType type) {
-    var prefix = "http://localhost:$_port/";
+    var prefix = "http://localhost:$_port/assets/";
     switch (type) {
       case IWebPlayerEmbeddedType.mui:
         return '${prefix}mui/index.html';
       case IWebPlayerEmbeddedType.p2p:
         return '${prefix}p2p-media-loader/p2pm3u8.html';
       case IWebPlayerEmbeddedType.p2pHLS:
-        return '${prefix}p2phls.html/p2phls.html';
+        return '${prefix}p2phls/p2phls.html';
       case IWebPlayerEmbeddedType.p2pGO:
         return '${prefix}p2pplayer/index.htm';
     }
