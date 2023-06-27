@@ -38,6 +38,7 @@ dependencies:
 
   webplayer_embedded:
     path: ../
+  url_launcher: ^6.1.11
 
 dev_dependencies:
   flutter_test:
