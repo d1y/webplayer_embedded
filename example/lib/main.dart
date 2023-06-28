@@ -44,11 +44,11 @@ class _MyHomePageState extends State<MyHomePage> {
     setState(() {});
   }
 
-  List<Map<String, dynamic>> menus = [
-    {"key": "MUI播放器", "e": IWebPlayerEmbeddedType.mui},
-    {"key": "P2P播放器", "e": IWebPlayerEmbeddedType.p2p},
-    {"key": "P2P播放器-GO", "e": IWebPlayerEmbeddedType.p2pGO},
-    {"key": "P2P播放器-HLS", "e": IWebPlayerEmbeddedType.p2pHLS},
+  List<IWebPlayerEmbeddedType> menus = [
+    IWebPlayerEmbeddedType.mui,
+    IWebPlayerEmbeddedType.p2p,
+    IWebPlayerEmbeddedType.p2pGO,
+    IWebPlayerEmbeddedType.p2pHLS,
   ];
 
   @override
@@ -105,9 +105,8 @@ class _MyHomePageState extends State<MyHomePage> {
                       child: GestureDetector(
                         onTap: isRunning
                             ? () {
-                                var e = item["e"];
                                 var targetURL = webPlayer.generatePlayerUrl(
-                                  e,
+                                  item,
                                   "https://vod2.bdzybf7.com/20220330/pFuZoqdd/index.m3u8",
                                 );
                                 var url0 = Uri.parse(targetURL);
@@ -116,7 +115,7 @@ class _MyHomePageState extends State<MyHomePage> {
                             : null,
                         child: Padding(
                           padding: const EdgeInsets.all(8.0),
-                          child: Text(item['key']),
+                          child: Text(item.toHuman),
                         ),
                       ),
                     );

@@ -12,3 +12,18 @@ enum IWebPlayerEmbeddedType {
   /// P2P播放器-HLS
   p2pHLS,
 }
+
+extension WebPlayerEmbeddedTypeStr on IWebPlayerEmbeddedType {
+  String get toHuman {
+    switch (this) {
+      case IWebPlayerEmbeddedType.mui:
+        return 'MUI播放器';
+      case IWebPlayerEmbeddedType.p2p:
+        return 'P2P播放器';
+      case IWebPlayerEmbeddedType.p2pGO:
+        return 'P2P播放器-GO';
+      case IWebPlayerEmbeddedType.p2pHLS:
+        return 'P2P播放器-HLS';
+    }
+  }
+}
