@@ -114,7 +114,7 @@
             window.sessionStorage.clear();
         }
     };
-	    var m3u8url = document.location.href.split("url=")[1];
+	    var m3u8url = decodeURIComponent(document.location.href.split("url=")[1]);
 			this.isP2PSupported = p2pml.core.HybridLoader.isSupported();
             const config = {
                 segments: {

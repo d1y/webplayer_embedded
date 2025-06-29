@@ -55,9 +55,12 @@ class WebPlayerEmbedded implements IWebPlayerEmbedded {
   }
 
   @override
-  generatePlayerUrl(IWebPlayerEmbeddedType type, String playURL) {
+  generatePlayerUrl(IWebPlayerEmbeddedType type, String playURL,
+      {String danmu = ""}) {
     var url = getRealUrl(type);
-    return '$url?url=$playURL';
+    var result = '$url?url=${encodeURLComponent(playURL)}';
+    if (danmu.isNotEmpty) result += '&danmu=${encodeURLComponent(danmu)}';
+    return result;
   }
 
   @override
@@ -74,4 +77,9 @@ class WebPlayerEmbedded implements IWebPlayerEmbedded {
         return '${prefix}p2pplayer/index.htm';
     }
   }
+
+  String encodeURLComponent(String raw) {
+    return Uri.encodeComponent(raw);
+  }
+
 }

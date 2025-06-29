@@ -48,7 +48,7 @@ body,html{width:100%;height:100%;background:#000;padding:0;margin:0;overflow-x:h
 <script src="/assets/p2pplayer/DPlayer.min.js"></script>
 <script src="/assets/p2pplayer/p2p.min.js"></script>
 <script type="text/javascript">
-	var m3u8url = document.location.href.split("url=")[1];
+	var m3u8url = decodeURIComponent(document.location.href.split("url=")[1])
 
     P2PEngine.dplayer(
       'dplayer', // 容器 id

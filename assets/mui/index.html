@@ -74,7 +74,7 @@
     </style>
 <div id="loading"  align="center"></div>
 <script type="text/javascript">
-    var m3u8url = document.location.href.split("url=")[1];
+    var m3u8url = decodeURIComponent(document.location.href.split("url=")[1]);
     var config = {
         "url": m3u8url,
         "key":"",
