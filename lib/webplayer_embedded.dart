@@ -1,7 +1,9 @@
 library webplayer_embedded;
 
+import 'dart:convert';
 import 'dart:io';
 
+import 'package:flutter/rendering.dart';
 import 'package:shelf/shelf_io.dart' as io;
 import 'package:shelf/shelf.dart';
 import 'package:shelf_router/shelf_router.dart';
@@ -27,19 +29,34 @@ class WebPlayerEmbedded implements IWebPlayerEmbedded {
   }
 
   @override
-  Future<HttpServer> createServer({int? port}) async {
+  Future<HttpServer> createServer({
+    int? port,
+    ValueChanged<IMessage>? onMessage,
+  }) async {
     var realPort = port ?? kWebPlayerEmbeddedPort;
-    var ctx = _run(realPort);
+    var ctx = _run(realPort, onMessage);
     _port = realPort;
     return ctx;
   }
 
-  Future<HttpServer> _run(int port) async {
+  Future<HttpServer> _run(int port, ValueChanged<IMessage>? onMessage) async {
     var app = Router();
     final assetHandler = createAssetHandler(defaultDocument: 'index.htm');
 
     app.get('/assets/<ignored|.*>', (Request request) {
       return assetHandler(request.change(path: 'assets'));
+    });
+
+    app.post("/internal_msg", (Request request) async {
+      String body = await request.readAsString();
+      final Map<String, dynamic> json = jsonDecode(body);
+      var msg = IMessage(type: json['type'], value: json['value']);
+      if (onMessage != null) {
+        onMessage(msg);
+      }
+      return Response.ok('pong', headers: {
+        'Access-Control-Allow-Origin': '*',
+      });
     });
 
     _server = await io.serve(app, 'localhost', port);
@@ -55,8 +72,11 @@ class WebPlayerEmbedded implements IWebPlayerEmbedded {
   }
 
   @override
-  generatePlayerUrl(IWebPlayerEmbeddedType type, String playURL,
-      {String danmu = ""}) {
+  generatePlayerUrl(
+    IWebPlayerEmbeddedType type,
+    String playURL, {
+    String danmu = "",
+  }) {
     var url = getRealUrl(type);
     var result = '$url?url=${encodeURLComponent(playURL)}';
     if (danmu.isNotEmpty) result += '&danmu=${encodeURLComponent(danmu)}';
@@ -81,5 +101,4 @@ class WebPlayerEmbedded implements IWebPlayerEmbedded {
   String encodeURLComponent(String raw) {
     return Uri.encodeComponent(raw);
   }
-
 }

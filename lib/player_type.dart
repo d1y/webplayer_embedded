@@ -13,6 +13,13 @@ enum IWebPlayerEmbeddedType {
   p2pHLS,
 }
 
+class IMessage {
+  IMessage({required this.type, required this.value});
+
+  final String type;
+  final String value;
+}
+
 extension WebPlayerEmbeddedTypeStr on IWebPlayerEmbeddedType {
   String get toHuman {
     switch (this) {
