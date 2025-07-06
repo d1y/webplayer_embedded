@@ -63,11 +63,13 @@ Handler createAssetHandler(
 
 Future<Uint8List?> _loadResource(String key) async {
   try {
-    debugPrint('curr path key: $key');
-    final byteData = await rootBundle.load(key);
+    // Ensure path uses forward slashes for Flutter asset loading
+    final normalizedKey = key.replaceAll('\\', '/');
+    debugPrint('curr path key: $normalizedKey');
+    final byteData = await rootBundle.load(normalizedKey);
     return byteData.buffer.asUint8List();
-  } catch (_) {
-    debugPrint('error');
+  } catch (e) {
+    debugPrint('Error loading resource: $e');
   }
 
   return null;
