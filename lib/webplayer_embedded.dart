@@ -15,7 +15,6 @@ export 'package:webplayer_embedded/player_abs.dart';
 export 'package:webplayer_embedded/player_type.dart';
 
 class WebPlayerEmbedded implements IWebPlayerEmbedded {
-  int _port = 0;
   HttpServer? _server;
 
   @override
@@ -24,22 +23,12 @@ class WebPlayerEmbedded implements IWebPlayerEmbedded {
   }
 
   @override
-  int getRealPort() {
-    return _port;
-  }
-
-  @override
-  Future<HttpServer> createServer({
-    int? port,
-    ValueChanged<IMessage>? onMessage,
-  }) async {
-    var realPort = port ?? kWebPlayerEmbeddedPort;
-    var ctx = _run(realPort, onMessage);
-    _port = realPort;
+  Future<HttpServer> createServer({ValueChanged<IMessage>? onMessage}) async {
+    var ctx = _run(onMessage);
     return ctx;
   }
 
-  Future<HttpServer> _run(int port, ValueChanged<IMessage>? onMessage) async {
+  Future<HttpServer> _run(ValueChanged<IMessage>? onMessage) async {
     var app = Router();
     final assetHandler = createAssetHandler(defaultDocument: 'index.htm');
 
@@ -59,7 +48,12 @@ class WebPlayerEmbedded implements IWebPlayerEmbedded {
       });
     });
 
-    _server = await io.serve(app, 'localhost', port);
+    _server = await io.serve(
+      app,
+      'localhost',
+      0 /* random port */,
+      shared: true,
+    );
     return _server!;
   }
 
@@ -85,7 +79,9 @@ class WebPlayerEmbedded implements IWebPlayerEmbedded {
 
   @override
   getRealUrl(IWebPlayerEmbeddedType type) {
-    var prefix = "http://localhost:$_port/assets/";
+    assert(_server != null);
+    var port = _server!.port;
+    var prefix = "http://localhost:$port/assets/";
     switch (type) {
       case IWebPlayerEmbeddedType.mui:
         return '${prefix}mui/index.html';

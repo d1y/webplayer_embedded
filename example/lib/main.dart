@@ -76,8 +76,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       if (await webPlayer.checkRunning()) return;
                       var currPort = textEditingController.text;
                       if (currPort.isEmpty) return;
-                      var newPort = int.parse(currPort);
-                      await webPlayer.createServer(port: newPort);
+                      await webPlayer.createServer();
                       await updateRunningStatus();
                     },
                     child: const Text("打开服务器"),
